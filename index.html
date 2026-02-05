@@ -18,36 +18,30 @@
 
     h1 {
       color: white;
-      font-size: 2.5em;
+      font-size: 2.4em;
       text-align: center;
       margin-bottom: 40px;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.3);
     }
 
-    .buttons {
-      position: relative;
-      display: flex;
-      gap: 20px;
-    }
-
-    button {
+    #yes {
       padding: 15px 30px;
       font-size: 18px;
       border: none;
       border-radius: 30px;
-      cursor: pointer;
-      z-index: 2;
-    }
-
-    #yes {
       background-color: #ff4d6d;
       color: white;
+      z-index: 1;
     }
 
     #no {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
       background-color: white;
       color: #ff4d6d;
       position: absolute;
+      z-index: 10;
     }
 
     .heart {
@@ -58,8 +52,8 @@
     }
 
     @keyframes fall {
-      0% { transform: translateY(-10vh); opacity: 1; }
-      100% { transform: translateY(110vh); opacity: 0; }
+      from { transform: translateY(-10vh); opacity: 1; }
+      to { transform: translateY(110vh); opacity: 0; }
     }
   </style>
 </head>
@@ -67,10 +61,8 @@
 
   <h1>Veux-tu être ma Valentine ? 💘</h1>
 
-  <div class="buttons">
-    <button id="yes">Oui 💕</button>
-    <button id="no">Non 😅</button>
-  </div>
+  <button id="yes">Oui 💕</button>
+  <button id="no">Non 😅</button>
 
   <script>
     const no = document.getElementById("no");
@@ -78,19 +70,23 @@
 
     const moveNo = (e) => {
       e.preventDefault();
-      e.stopPropagation();
+      e.stopImmediatePropagation();
 
-      const maxX = window.innerWidth - no.offsetWidth;
-      const maxY = window.innerHeight - no.offsetHeight;
+      // Désactive temporairement le bouton Oui
+      yes.style.pointerEvents = "none";
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      const x = Math.random() * (window.innerWidth - no.offsetWidth);
+      const y = Math.random() * (window.innerHeight - no.offsetHeight);
 
       no.style.left = x + "px";
       no.style.top = y + "px";
+
+      // Réactive Oui après le mouvement
+      setTimeout(() => {
+        yes.style.pointerEvents = "auto";
+      }, 300);
     };
 
-    // Fonctionne sur téléphone ET ordinateur
     no.addEventListener("touchstart", moveNo);
     no.addEventListener("mouseover", moveNo);
     no.addEventListener("click", moveNo);
@@ -99,13 +95,12 @@
       document.body.innerHTML = "<h1>J’avais aucun doute 😍💖</h1>";
     });
 
-    // Pluie de cœurs
+    // Cœurs
     setInterval(() => {
       const heart = document.createElement("div");
       heart.className = "heart";
       heart.innerHTML = "💖";
       heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = Math.random() * 20 + 15 + "px";
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 5000);
     }, 300);

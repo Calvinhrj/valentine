@@ -71,11 +71,13 @@
   </div>
 
   <script>
-    const no = document.getElementById("no");
-    no.addEventListener("mouseover", () => {
-      no.style.left = Math.random() * 80 + "vw";
-      no.style.top = Math.random() * 80 + "vh";
-    });
+    const moveNo = () => {
+  no.style.left = Math.random() * 80 + "vw";
+  no.style.top = Math.random() * 80 + "vh";
+};
+
+no.addEventListener("mouseover", moveNo);   // ordinateur
+no.addEventListener("touchstart", moveNo);  // téléphone
 
     document.getElementById("yes").onclick = () => {
       document.body.innerHTML = "<h1>J’avais aucun doute 😍💖</h1>";
